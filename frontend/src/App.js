@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect, useContext, createContext } from "react";
 
 // quick helper function to easily convert to title case
 function titleCase(str) {
@@ -7,14 +7,20 @@ function titleCase(str) {
            w.substring(1).toLowerCase()).join(' ');
 }
 
-// transfers all planes into planeBox on app start
-const origData = require("./data.json");
-origData.planes.forEach((plane) => {
-    plane.spot = "planeBox";
-    origData.spots.planeBox.plane.push(plane);
+// contexts
+const PlaneToMoveContext = createContext({
+    planeToMove: null,
+    setPlaneToMove: () => {}
 });
 
-function RampBox({ data, updateData, moveMode, setMoveMode, moveHere }) {
+const RefreshTogglerContext = createContext({
+    refreshToggler: false,
+    setRefreshToggler: () => {}
+});
+
+const MovePlaneContext = createContext(() => {});
+
+function RampBox() {
     return (
         <div id="ramp" className="box">
             <div className="box title-box" style={{"fontSize": 1.5+"em"}}>
@@ -22,131 +28,69 @@ function RampBox({ data, updateData, moveMode, setMoveMode, moveHere }) {
             </div>
             <table className="table-list" border="1" frame="void" rules="rows">
                 <tbody>
-                    <RampBoxItem name="ramp-a" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <RampBoxItem name="ramp-b" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <RampBoxItem name="ramp-c" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <RampBoxItem name="ramp-d" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <RampBoxItem name="ramp-e" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <RampBoxItem name="ramp-f" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <RampBoxItem name="ramp-g" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <RampBoxItem name="ramp-h" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <RampBoxItem name="ramp-i" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <RampBoxItem name="ramp-j" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <RampBoxItem name="ramp-k" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <RampBoxItem name="ramp-l" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <RampBoxItem name="ramp-m" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <RampBoxItem name="ramp-n" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <RampBoxItem name="ramp-o" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <RampBoxItem name="ramp-p" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <RampBoxItem name="ramp-q" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <RampBoxItem name="ramp-r" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
+                    <Spot name="ramp-a" box="ramp" many={false} />
+                    <Spot name="ramp-b" box="ramp" many={false} />
+                    <Spot name="ramp-c" box="ramp" many={false} />
+                    <Spot name="ramp-d" box="ramp" many={false} />
+                    <Spot name="ramp-e" box="ramp" many={false} />
+                    <Spot name="ramp-f" box="ramp" many={false} />
+                    <Spot name="ramp-g" box="ramp" many={false} />
+                    <Spot name="ramp-h" box="ramp" many={false} />
+                    <Spot name="ramp-i" box="ramp" many={false} />
+                    <Spot name="ramp-j" box="ramp" many={false} />
+                    <Spot name="ramp-k" box="ramp" many={false} />
+                    <Spot name="ramp-l" box="ramp" many={false} />
+                    <Spot name="ramp-m" box="ramp" many={false} />
+                    <Spot name="ramp-n" box="ramp" many={false} />
+                    <Spot name="ramp-o" box="ramp" many={false} />
+                    <Spot name="ramp-p" box="ramp" many={false} />
+                    <Spot name="ramp-q" box="ramp" many={false} />
+                    <Spot name="ramp-r" box="ramp" many={false} />
                 </tbody>
             </table>
         </div>
     );
 }
 
-function RampBoxItem({ name, data, updateData, moveMode, setMoveMode, moveHere }) {
-    let plane;
-    if (data.spots[name].plane) {
-        plane = (
-            <Plane plane={data.spots[name].plane} moveMode={moveMode}
-                setMoveMode={setMoveMode} />
-        );
-    }
-    let glow = (moveMode && !data.spots[name].plane ? "glow" : "");
-    let upperChar = name.replace("ramp-", "").toUpperCase();
-    return (
-        <tr id={name} className={glow}
-                onClick={() => moveHere(name, data, updateData, moveMode, setMoveMode)}>
-            <td>{upperChar}</td>
-            <td>{plane}</td>
-        </tr>
-    );
-}
-
-function DirectionBox({ data, updateData, moveMode, setMoveMode, moveHere }) {
+function DirectionBox() {
     return (
         <div id="direction" className="box">
             <table className="center-table" border="1" frame="void">
                 <tbody>
                     <tr>
-                        <DirectionBoxItem name="xc-1" data={data} updateData={updateData}
-                            moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
+                        <Spot name="xc-1" box="direction" many={true} />
                         <td>
                             <table className="center-table" border="1" frame="void">
                                 <tbody>
                                     <tr>
-                                        <DirectionBoxItem name="kmcx"
-                                            data={data} updateData={updateData}
-                                            moveMode={moveMode} setMoveMode={setMoveMode}
-                                            moveHere={moveHere} />
+                                        <Spot name="kmcx" box="direction" many={true} />
                                     </tr>
                                     <tr>
-                                        <DirectionBoxItem name="northwest"
-                                            data={data} updateData={updateData}
-                                            moveMode={moveMode} setMoveMode={setMoveMode}
-                                            moveHere={moveHere} />
-                                        <DirectionBoxItem name="northeast"
-                                            data={data} updateData={updateData}
-                                            moveMode={moveMode} setMoveMode={setMoveMode}
-                                            moveHere={moveHere} />
+                                        <Spot name="northwest" box="direction" many={true} />
+                                        <Spot name="northeast" box="direction" many={true} />
                                     </tr>
                                 </tbody>
                             </table>
                         </td>
-                        <DirectionBoxItem name="xc-2" data={data} updateData={updateData}
-                            moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
+                        <Spot name="xc-2" box="direction" many={true} />
                     </tr>
                     <tr>
-                        <DirectionBoxItem name="xc-3" data={data} updateData={updateData}
-                            moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
+                        <Spot name="xc-3" box="direction" many={true} />
                         <td>
                             <table className="center-table" border="1" frame="void">
                                 <tbody>
                                     <tr>
-                                        <DirectionBoxItem name="southwest"
-                                            data={data} updateData={updateData}
-                                            moveMode={moveMode} setMoveMode={setMoveMode}
-                                            moveHere={moveHere} />
-                                        <DirectionBoxItem name="southeast"
-                                            data={data} updateData={updateData}
-                                            moveMode={moveMode} setMoveMode={setMoveMode}
-                                            moveHere={moveHere} />
+                                        <Spot name="southwest" box="direction" many={true} />
+                                        <Spot name="southeast" box="direction" many={true} />
                                     </tr>
                                     <tr>
-                                        <DirectionBoxItem name="kcfj"
-                                            data={data} updateData={updateData}
-                                            moveMode={moveMode} setMoveMode={setMoveMode}
-                                            moveHere={moveHere} />
-                                        <DirectionBoxItem name="kfkr"
-                                            data={data} updateData={updateData}
-                                            moveMode={moveMode} setMoveMode={setMoveMode}
-                                            moveHere={moveHere} />
+                                        <Spot name="kcfj" box="direction" many={true} />
+                                        <Spot name="kfkr" box="direction" many={true} />
                                     </tr>
                                 </tbody>
                             </table>
                         </td>
-                        <DirectionBoxItem name="xc-4" data={data} updateData={updateData}
-                            moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
+                        <Spot name="xc-4" box="direction" many={true} />
                     </tr>
                 </tbody>
             </table>
@@ -154,47 +98,7 @@ function DirectionBox({ data, updateData, moveMode, setMoveMode, moveHere }) {
     );
 }
 
-function DirectionBoxItem({ name, data, updateData, moveMode, setMoveMode, moveHere }) {
-    let planes = [];
-    for (let i = 0; i < data.spots[name].plane.length; i++) {
-        planes.push(
-            <Plane plane={data.spots[name].plane[i]} moveMode={moveMode}
-                setMoveMode={setMoveMode} />
-        );
-    }
-    let glow = (moveMode ? "glow" : "");
-    let classNameVal = "many";
-    let colSpanVal = 1;
-    let displayName;
-    let widthVal;
-    let heightVal;
-    if (name.length === 4) {
-        displayName = name.toUpperCase();
-    } else {
-        displayName = titleCase(name);
-    }
-    if (name.includes("xc")) {
-        displayName = "XC";
-        classNameVal += " vert";
-        widthVal = "75px";
-        heightVal = "148px";
-    } else {
-        heightVal = "70px";
-    }
-    if (name === "kmcx") {
-        colSpanVal = 2;
-    }
-    return (
-        <td id={name} className={glow}
-                onClick={() => moveHere(name, data, updateData, moveMode, setMoveMode)}
-                width={widthVal} height={heightVal} colSpan={colSpanVal}>
-            {displayName}
-            <div className={classNameVal}>{planes}</div>
-        </td>
-    );
-}
-
-function HangarsBox({ data, updateData, moveMode, setMoveMode, moveHere }) {
+function HangarsBox() {
     return (
         <div id="hangars" className="box">
             <table className="center-table" border="1" frame="void">
@@ -205,113 +109,67 @@ function HangarsBox({ data, updateData, moveMode, setMoveMode, moveHere }) {
                         <td colSpan="3" className="hangar-header">Hangar 6</td>
                     </tr>
                     <tr>
-                        <HangarsBoxItem name="h5-1" spotType="full" data={data}
-                            updateData={updateData} moveMode={moveMode}
-                            setMoveMode={setMoveMode} moveHere={moveHere}/>
-                        <HangarsBoxItem name="h5-2" spotType="full" data={data}
-                            updateData={updateData} moveMode={moveMode}
-                            setMoveMode={setMoveMode} moveHere={moveHere}/>
-                        <HangarsBoxItem name="h5-3" spotType="full" data={data}
-                            updateData={updateData} moveMode={moveMode}
-                            setMoveMode={setMoveMode} moveHere={moveHere}/>
-                        <HangarsBoxItem name="h6w-1" spotType="full" data={data}
-                            updateData={updateData} moveMode={moveMode}
-                            setMoveMode={setMoveMode} moveHere={moveHere}/>
+                        <Spot name="h5-1" box="hangars" many={false} />
+                        <Spot name="h5-2" box="hangars" many={false} />
+                        <Spot name="h5-3" box="hangars" many={false} />
+                        <Spot name="h6w-1" box="hangars" many={false} />
                         <td>
                             <table className="center-table" border="1" frame="void">
                                 <tbody>
                                     <tr>
-                                        <HangarsBoxItem name="h6w-7" spotType="half" data={data}
-                                            updateData={updateData} moveMode={moveMode}
-                                            setMoveMode={setMoveMode} moveHere={moveHere}/>
+                                        <Spot name="h6w-7" box="hangars" many={false} />
                                     </tr>
                                     <tr>
-                                        <HangarsBoxItem name="h6w-8" spotType="half" data={data}
-                                            updateData={updateData} moveMode={moveMode}
-                                            setMoveMode={setMoveMode} moveHere={moveHere}/>
+                                        <Spot name="h6w-8" box="hangars" many={false} />
                                     </tr>
                                 </tbody>
                             </table>
                         </td>
-                        <HangarsBoxItem name="h6w-4" spotType="full" data={data}
-                            updateData={updateData} moveMode={moveMode}
-                            setMoveMode={setMoveMode} moveHere={moveHere}/>
-                        <HangarsBoxItem name="h6-1" spotType="full" data={data}
-                            updateData={updateData} moveMode={moveMode}
-                            setMoveMode={setMoveMode} moveHere={moveHere}/>
-                        <HangarsBoxItem name="h6-2" spotType="full" data={data}
-                            updateData={updateData} moveMode={moveMode}
-                            setMoveMode={setMoveMode} moveHere={moveHere}/>
-                        <HangarsBoxItem name="h6-3" spotType="full" data={data}
-                            updateData={updateData} moveMode={moveMode}
-                            setMoveMode={setMoveMode} moveHere={moveHere}/>
+                        <Spot name="h6w-4" box="hangars" many={false} />
+                        <Spot name="h6-1" box="hangars" many={false} />
+                        <Spot name="h6-2" box="hangars" many={false} />
+                        <Spot name="h6-3" box="hangars" many={false} />
                     </tr>
                     <tr>
-                        <HangarsBoxItem name="h5-4" spotType="full" data={data}
-                            updateData={updateData} moveMode={moveMode}
-                            setMoveMode={setMoveMode} moveHere={moveHere}/>
-                        <HangarsBoxItem name="h5-5" spotType="full" data={data}
-                            updateData={updateData} moveMode={moveMode}
-                            setMoveMode={setMoveMode} moveHere={moveHere}/>
-                        <HangarsBoxItem name="h5-6" spotType="full" data={data}
-                            updateData={updateData} moveMode={moveMode}
-                            setMoveMode={setMoveMode} moveHere={moveHere}/>
-                        <HangarsBoxItem name="h6w-2" spotType="full" data={data}
-                            updateData={updateData} moveMode={moveMode}
-                            setMoveMode={setMoveMode} moveHere={moveHere}/>
+                        <Spot name="h5-4" box="hangars" many={false} />
+                        <Spot name="h5-5" box="hangars" many={false} />
+                        <Spot name="h5-6" box="hangars" many={false} />
+                        <Spot name="h6w-2" box="hangars" many={false} />
                         <td>
                             <table className="center-table" border="1" frame="void">
                                 <tbody>
                                     <tr>
-                                        <HangarsBoxItem name="h6w-9" spotType="half" data={data}
-                                            updateData={updateData} moveMode={moveMode}
-                                            setMoveMode={setMoveMode} moveHere={moveHere}/>
+                                        <Spot name="h6w-9" box="hangars" many={false} />
                                     </tr>
                                     <tr>
-                                        <HangarsBoxItem name="h6w-10" spotType="half" data={data}
-                                            updateData={updateData} moveMode={moveMode}
-                                            setMoveMode={setMoveMode} moveHere={moveHere}/>
+                                        <Spot name="h6w-10" box="hangars" many={false} />
                                     </tr>
                                 </tbody>
                             </table>
                         </td>
-                        <HangarsBoxItem name="h6w-5" spotType="full" data={data}
-                            updateData={updateData} moveMode={moveMode}
-                            setMoveMode={setMoveMode} moveHere={moveHere}/>
+                        <Spot name="h6w-5" box="hangars" many={false} />
                         <td className="empty"></td>
-                        <HangarsBoxItem name="h6-4" spotType="full" data={data}
-                            updateData={updateData} moveMode={moveMode}
-                            setMoveMode={setMoveMode} moveHere={moveHere}/>
+                        <Spot name="h6-4" box="hangars" many={false} />
                         <td className="empty"></td>
                     </tr>
                     <tr>
                         <td className="empty"></td>
-                        <HangarsBoxItem name="h5-7" spotType="full" data={data}
-                            updateData={updateData} moveMode={moveMode}
-                            setMoveMode={setMoveMode} moveHere={moveHere}/>
+                        <Spot name="h5-7" box="hangars" many={false} />
                         <td className="empty"></td>
-                        <HangarsBoxItem name="h6w-3" spotType="full" data={data}
-                            updateData={updateData} moveMode={moveMode}
-                            setMoveMode={setMoveMode} moveHere={moveHere}/>
+                        <Spot name="h6w-3" box="hangars" many={false} />
                         <td>
                             <table className="center-table" border="1" frame="void">
                                 <tbody>
                                     <tr>
-                                        <HangarsBoxItem name="h6w-11" spotType="half" data={data}
-                                            updateData={updateData} moveMode={moveMode}
-                                            setMoveMode={setMoveMode} moveHere={moveHere}/>
+                                        <Spot name="h6w-11" box="hangars" many={false} />
                                     </tr>
                                     <tr>
-                                        <HangarsBoxItem name="h6w-12" spotType="half" data={data}
-                                            updateData={updateData} moveMode={moveMode}
-                                            setMoveMode={setMoveMode} moveHere={moveHere}/>
+                                        <Spot name="h6w-12" box="hangars" many={false} />
                                     </tr>
                                 </tbody>
                             </table>
                         </td>
-                        <HangarsBoxItem name="h6w-6" spotType="full" data={data}
-                            updateData={updateData} moveMode={moveMode}
-                            setMoveMode={setMoveMode} moveHere={moveHere}/>
+                        <Spot name="h6w-6" box="hangars" many={false} />
                         <td className="empty"></td>
                         <td className="empty"></td>
                         <td className="empty"></td>
@@ -322,228 +180,249 @@ function HangarsBox({ data, updateData, moveMode, setMoveMode, moveHere }) {
     );
 }
 
-function HangarsBoxItem({ name, spotType, data, updateData, moveMode, setMoveMode, moveHere }) {
-    let plane;
-    if (data.spots[name].plane) {
-        plane = (
-            <Plane plane={data.spots[name].plane} moveMode={moveMode}
-                setMoveMode={setMoveMode} />
-        );
-    }
-    let glow = (moveMode && !data.spots[name].plane ? "glow" : "");
-    let heightVal = "68px";
-    if (spotType === "half") {
-        heightVal = "34px";
-    }
-    return (
-        <td id={name} className={glow} width="75px" height={heightVal}
-                onClick={() => moveHere(name, data, updateData, moveMode, setMoveMode)}>
-            <div>{plane}</div>
-        </td>
-    );
-}
-
-function OtherBox({ data, updateData, moveMode, setMoveMode, moveHere }) {
+function OtherBox() {
     return (
         <div id="other" className="box">
             <table id="other-table-list" className="table-list"
                    border="1" frame="void" rules="rows">
                 <tbody>
-                    <OtherBoxItem name="approaches" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <OtherBoxItem name="landings" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <OtherBoxItem name="purdue-aviation" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
+                    <Spot name="approaches" box="other" many={true} />
+                    <Spot name="landings" box="other" many={true} />
+                    <Spot name="purdue-aviation" box="other" many={true} />
                 </tbody>
             </table>
         </div>
     );
 }
 
-function OtherBoxItem({ name, data, updateData, moveMode, setMoveMode, moveHere }) {
-    let planes = [];
-    for (let i = 0; i < data.spots[name].plane.length; i++) {
-        planes.push(
-            <Plane plane={data.spots[name].plane[i]} moveMode={moveMode}
-                setMoveMode={setMoveMode} />
-        );
-    }
-    let glow = (moveMode ? "glow" : "");
-    let displayName = titleCase(name);
-    return (
-        <tr id={name} className={glow}
-                onClick={() => moveHere(name, data, updateData, moveMode, setMoveMode)}>
-            <td>{displayName}</td>
-            <td>{planes}</td>
-        </tr>
-    );
-}
-
-function TDoorsBox({ data, updateData, moveMode, setMoveMode, moveHere }) {
+function TDoorsBox() {
     return (
         <div id="t-doors" className="box">
             <div className="box title-box" style={{"fontSize": 1.5+"em"}}>T Doors</div>
             <table className="table-list" border="1" frame="void" rules="rows">
                 <tbody>
-                    <TDoorsBoxItem name="t-1" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <TDoorsBoxItem name="t-2" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <TDoorsBoxItem name="t-3" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <TDoorsBoxItem name="t-4" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <TDoorsBoxItem name="t-5" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <TDoorsBoxItem name="t-6" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <TDoorsBoxItem name="t-7" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <TDoorsBoxItem name="t-8" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <TDoorsBoxItem name="t-9" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
-                    <TDoorsBoxItem name="t-10" data={data} updateData={updateData}
-                        moveMode={moveMode} setMoveMode={setMoveMode} moveHere={moveHere} />
+                    <Spot name="t-1" box="tdoors" many={false} />
+                    <Spot name="t-2" box="tdoors" many={false} />
+                    <Spot name="t-3" box="tdoors" many={false} />
+                    <Spot name="t-4" box="tdoors" many={false} />
+                    <Spot name="t-5" box="tdoors" many={false} />
+                    <Spot name="t-6" box="tdoors" many={false} />
+                    <Spot name="t-7" box="tdoors" many={false} />
+                    <Spot name="t-8" box="tdoors" many={false} />
+                    <Spot name="t-9" box="tdoors" many={false} />
+                    <Spot name="t-10" box="tdoors" many={false} />
                 </tbody>
             </table>
         </div>
     );
 }
 
-function TDoorsBoxItem({ name, data, updateData, moveMode, setMoveMode, moveHere }) {
-    let plane;
-    if (data.spots[name].plane) {
-        plane = (
-            <Plane plane={data.spots[name].plane} moveMode={moveMode}
-                setMoveMode={setMoveMode} />
+function Spot({ name, box, many }) {
+    const { planeToMove, setPlaneToMove } = useContext(PlaneToMoveContext);
+    const { refreshToggler, setRefreshToggler } = useContext(RefreshTogglerContext);
+    const movePlane = useContext(MovePlaneContext);
+    const [spotData, setSpotData] = useState(null);
+    useEffect(() => {
+        async function getSpotData() {
+            const response = await fetch("http://localhost:8080/getSpot?spot=" + name);
+            return response.json();
+        }
+        getSpotData()
+            .then(spotData => setSpotData(spotData))
+            .catch(e => console.log(e));
+    }, [name, refreshToggler]);
+    if (spotData) {
+        let plane;
+        let planes = [];
+        let glow;
+        if (many) {
+            for (let i = 0; i < spotData.plane.length; i++) {
+                planes.push(
+                    <Plane plane={spotData.plane[i]} />
+                );
+            }
+            glow = (planeToMove ? "glow" : "");
+        } else {
+            if (spotData.plane) {
+                plane = (
+                    <Plane plane={spotData.plane} />
+                );
+            }
+            glow = (planeToMove && !spotData.plane ? "glow" : "");
+        }
+        switch (box) {
+            case "ramp":
+                let upperChar = name.replace("ramp-", "").toUpperCase();
+                return (
+                    <tr id={name} className={glow} onClick={() => movePlane(name, planeToMove)}>
+                        <td>{upperChar}</td>
+                        <td>{plane}</td>
+                    </tr>
+                );
+            case "tdoors":
+                let n = name.replace("t-", "");
+                return (
+                    <tr id={name} className={glow} onClick={() => movePlane(name, planeToMove)}>
+                        <td>{n}</td>
+                        <td>
+                            {plane} 
+                        </td>
+                    </tr>
+                );
+            case "hangars":
+                let hangarsHeightVal = "68px";
+                if ([ "7", "8", "9", "10", "11", "12" ].includes(name.replace("h6w-",""))) {
+                    hangarsHeightVal = "34px";
+                }
+                return (
+                    <td id={name} className={glow} width="75px" height={hangarsHeightVal}
+                            onClick={() => movePlane(name, planeToMove)}>
+                        <div>{plane}</div>
+                    </td>
+                );
+            case "direction":
+                let classNameVal = "many";
+                let colSpanVal = 1;
+                let displayName;
+                let widthVal;
+                let heightVal;
+                if (name.length === 4) {
+                    displayName = name.toUpperCase();
+                } else {
+                    displayName = titleCase(name);
+                }
+                if (name.includes("xc")) {
+                    displayName = "XC";
+                    classNameVal += " vert";
+                    widthVal = "75px";
+                    heightVal = "148px";
+                } else {
+                    heightVal = "70px";
+                }
+                if (name === "kmcx") {
+                    colSpanVal = 2;
+                }
+                return (
+                    <td id={name} className={glow} onClick={() => movePlane(name, planeToMove)}
+                            width={widthVal} height={heightVal} colSpan={colSpanVal}>
+                        {displayName}
+                        <div className={classNameVal}>{planes}</div>
+                    </td>
+                );
+            case "other":
+                let otherDisplayName = titleCase(name);
+                return (
+                    <tr id={name} className={glow} onClick={() => movePlane(name, planeToMove)}>
+                        <td>{otherDisplayName}</td>
+                        <td>{planes}</td>
+                    </tr>
+                );
+            default:
+        }
+    }
+}
+
+function PlaneBox() {
+    const { refreshToggler, setRefreshToggler } = useContext(RefreshTogglerContext);
+    const [planes, setPlanes] = useState(null);
+    useEffect(() => {
+        async function getPlanes() {
+            const response = await fetch("http://localhost:8080/getSpot?spot=planeBox");
+            return response.json();
+        }
+        getPlanes()
+            .then(planes => setPlanes(planes.plane))
+            .catch(e => console.log(e));
+    }, [refreshToggler]);
+    if (planes) {
+        const planeElements = [];
+        planes.forEach((plane) => {
+            planeElements.push(
+                <Plane plane={plane} />
+            );
+        });
+        return (
+            <div>
+                {planeElements}
+            </div>
         );
     }
-    let glow = (moveMode && !data.spots[name].plane ? "glow" : "");
-    let n = name.replace("t-", "");
-    return (
-        <tr id={name} className={glow}
-                onClick={() => moveHere(name, data, updateData, moveMode, setMoveMode)}>
-            <td>{n}</td>
-            <td>
-                {plane} 
-            </td>
-        </tr>
-    );
 }
 
-function PlaneBox({ data, moveMode, setMoveMode }) {
-    const planeElements = [];
-    data.spots.planeBox.plane.forEach((plane) => {
-        planeElements.push(
-            <Plane plane={plane} moveMode={moveMode} setMoveMode={setMoveMode} />
-        );
-    });
-    return (
-        <div>
-            {planeElements}
-        </div>
-    );
-}
-
-function Plane({ plane, moveMode, setMoveMode }) {
+function Plane({ plane }) {
+    const { planeToMove, setPlaneToMove } = useContext(PlaneToMoveContext);
     let planeClass = "plane " + plane.type;
-    if (moveMode === plane.tailNumber) {
+    if (planeToMove === plane.tailNumber) {
         planeClass += " glow";
     }
     return (
         <span id={plane.tailNumber} className={planeClass}
-              onClick={() => setMoveMode(plane.tailNumber)}>
+                onClick={() => setPlaneToMove(plane.tailNumber)}>
             {plane.tailNumber}
         </span>
     );
-
 }
 
 export default function App() {
-
-    // state
-    const [data, updateData] = useState(origData);
-    const [moveMode, setMoveMode] = useState(null);
-
-    // function to move plane
-    function moveHere(spotName, data, updateData, moveMode, setMoveMode) {
-        if (moveMode) {
-            let planeData;
-            data.planes.forEach((plane) => {
-                if (plane.tailNumber === moveMode) {
-                    planeData = plane;
-                }
-            });
-            if (Array.isArray(data.spots[planeData.spot].plane)) {
-                data.spots[planeData.spot].plane.splice(
-                    data.spots[planeData.spot].plane.indexOf(planeData), 1);
-            } else {
-                data.spots[planeData.spot].plane = null;
-            }
-            planeData.spot = spotName;
-            if (Array.isArray(data.spots[spotName].plane)) {
-                data.spots[spotName].plane.push(planeData);
-            } else {
-                data.spots[spotName].plane = planeData;
-            }
-            updateData(data);
-            setMoveMode(null);
+    const [planeToMove, setPlaneToMove] = useState(null);
+    const [refreshToggler, setRefreshToggler] = useState(null);
+    async function movePlane(spotName, plane) {
+        if (planeToMove) {
+            fetch("http://localhost:8080/movePlane?plane=" + plane + "&spot=" + spotName)
+                .catch(e => console.log(e));
+            setPlaneToMove(null);
         }
     }
-
+    useEffect(() => {
+        let mount = true;
+        let events;
+        let timer;
+        let createEvents = () => {
+            if(events){
+                events.close();
+            }
+            events = new EventSource(`http://localhost:8080/events`);
+            events.onmessage = (event) => {
+                if(mount){
+                    setRefreshToggler(!refreshToggler);
+                }
+            };
+            events.onerror = (err) => {
+                timer = setTimeout(() => {
+                    createEvents();
+                }, 1000);
+            };
+        };
+        createEvents();
+        return () => {
+            mount = false;
+            clearTimeout(timer);
+            events.close();
+        }
+    }, [refreshToggler, setRefreshToggler]);
     return (
         <div>
-            <div id="frame">
-                <div id="title" className="box title-box">
-                    <h1>Aircraft Locations</h1>
+            <PlaneToMoveContext.Provider value={{ planeToMove, setPlaneToMove }}>
+            <RefreshTogglerContext.Provider value={{ refreshToggler, setRefreshToggler}}>
+            <MovePlaneContext.Provider value={movePlane}>
+                <div id="frame">
+                    <div id="title" className="box title-box">
+                        <h1>Aircraft Locations</h1>
+                    </div>
+                    <RampBox />
+                    <DirectionBox />
+                    <HangarsBox />
+                    <OtherBox />
+                    <TDoorsBox />
                 </div>
-                <RampBox
-                    data={data}
-                    updateData={updateData}
-                    moveMode={moveMode}
-                    setMoveMode={setMoveMode}
-                    moveHere={moveHere}
-                />
-                <DirectionBox
-                    data={data}
-                    updateData={updateData}
-                    moveMode={moveMode}
-                    setMoveMode={setMoveMode}
-                    moveHere={moveHere}
-                />
-                <HangarsBox
-                    data={data}
-                    updateData={updateData}
-                    moveMode={moveMode}
-                    setMoveMode={setMoveMode}
-                    moveHere={moveHere}
-                />
-                <OtherBox
-                    data={data}
-                    updateData={updateData}
-                    moveMode={moveMode}
-                    setMoveMode={setMoveMode}
-                    moveHere={moveHere}
-                />
-                <TDoorsBox
-                    data={data}
-                    updateData={updateData}
-                    moveMode={moveMode}
-                    setMoveMode={setMoveMode}
-                    moveHere={moveHere}
-                />
-            </div>
-            <div id="note">
-                Made with love by Johnny Burrer :)
-                Reach out on GroupMe with any feedback/bug reports!
-            </div>
-            <PlaneBox
-                data={data}
-                moveMode={moveMode}
-                setMoveMode={setMoveMode}
-            /> 
+                <div id="note">
+                    Made with love by Johnny Burrer :)
+                    Reach out on GroupMe with any feedback/bug reports!
+                </div>
+                <PlaneBox /> 
+            </MovePlaneContext.Provider>
+            </RefreshTogglerContext.Provider>
+            </PlaneToMoveContext.Provider>
         </div>
     );
 }
