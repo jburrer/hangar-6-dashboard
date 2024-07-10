@@ -23,7 +23,7 @@ const app = express();
 app.use(compression());
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static(path.join(new URL(".", import.meta.url).pathname, "./frontend/build")));
+app.use(express.static(path.join(new URL(".", import.meta.url).pathname, "../frontend/build")));
 
 // initialize array of clients (connected browsers)
 let clients = [];
