@@ -6,9 +6,9 @@ It features a backend written with Node.js using express, as well as lowdb for a
 and a frontend written with React. 
 
 Some relevant resources:
-https://react.dev
-https://react.dev/learn/passing-data-deeply-with-context
-https://dev.to/andreyen/sending-messages-to-clients-in-realtime-using-server-sent-events-nodejs-and-react-2g90
+- https://react.dev
+- https://react.dev/learn/passing-data-deeply-with-context
+- https://dev.to/andreyen/sending-messages-to-clients-in-realtime-using-server-sent-events-nodejs-and-react-2g90
 
 Used the nix package manager and direnv to create a development environment.
 
