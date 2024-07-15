@@ -345,7 +345,7 @@ function PlaneBox() {
             );
         });
         return (
-            <div>
+            <div id="planeBox">
                 {planeElements}
             </div>
         );

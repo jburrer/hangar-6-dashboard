@@ -16,7 +16,11 @@
       "plane": null
     },
     "ramp-f": {
-      "plane": null
+      "plane": {
+        "tailNumber": "N864PU",
+        "type": "archer",
+        "spot": "ramp-f"
+      }
     },
     "ramp-g": {
       "plane": null
@@ -41,11 +45,7 @@
       "plane": null
     },
     "ramp-m": {
-      "plane": {
-        "tailNumber": "N863PU",
-        "type": "archer",
-        "spot": "ramp-m"
-      }
+      "plane": null
     },
     "ramp-n": {
       "plane": null
@@ -63,10 +63,22 @@
       "plane": null
     },
     "xc-1": {
-      "plane": []
+      "plane": [
+        {
+          "tailNumber": "N861PU",
+          "type": "archer",
+          "spot": "xc-1"
+        }
+      ]
     },
     "xc-2": {
-      "plane": []
+      "plane": [
+        {
+          "tailNumber": "N857PU",
+          "type": "archer",
+          "spot": "xc-2"
+        }
+      ]
     },
     "xc-3": {
       "plane": []
@@ -90,11 +102,6 @@
       "plane": [
         {
           "tailNumber": "N858PU",
-          "type": "archer",
-          "spot": "kmcx"
-        },
-        {
-          "tailNumber": "N856PU",
           "type": "archer",
           "spot": "kmcx"
         }
@@ -140,23 +147,27 @@
       "plane": null
     },
     "h6w-5": {
-      "plane": null
+      "plane": {
+        "tailNumber": "N851PU",
+        "type": "archer",
+        "spot": "h6w-5"
+      }
     },
     "h6w-6": {
       "plane": null
     },
     "h6w-7": {
-      "plane": {
-        "tailNumber": "N851PU",
-        "type": "archer",
-        "spot": "h6w-7"
-      }
+      "plane": null
     },
     "h6w-8": {
       "plane": null
     },
     "h6w-9": {
-      "plane": null
+      "plane": {
+        "tailNumber": "N856PU",
+        "type": "archer",
+        "spot": "h6w-9"
+      }
     },
     "h6w-10": {
       "plane": null
@@ -334,26 +345,6 @@
           "tailNumber": "N570PU",
           "type": "seminole",
           "spot": "planeBox"
-        },
-        {
-          "tailNumber": "N571PU",
-          "type": "seminole",
-          "spot": "planeBox"
-        },
-        {
-          "tailNumber": "N455SA",
-          "type": "sky-arrow",
-          "spot": "planeBox"
-        },
-        {
-          "tailNumber": "N458SA",
-          "type": "sky-arrow",
-          "spot": "planeBox"
-        },
-        {
-          "tailNumber": "N600PU",
-          "type": "sky-arrow",
-          "spot": "planeBox"
         }
       ]
     }
@@ -367,7 +358,7 @@
     {
       "tailNumber": "N851PU",
       "type": "archer",
-      "spot": "h6w-7"
+      "spot": "h6w-5"
     },
     {
       "tailNumber": "N852PU",
@@ -392,12 +383,12 @@
     {
       "tailNumber": "N856PU",
       "type": "archer",
-      "spot": "kmcx"
+      "spot": "h6w-9"
     },
     {
       "tailNumber": "N857PU",
       "type": "archer",
-      "spot": "planeBox"
+      "spot": "xc-2"
     },
     {
       "tailNumber": "N858PU",
@@ -412,12 +403,12 @@
     {
       "tailNumber": "N860PU",
       "type": "archer",
-      "spot": "planeBox"
+      "spot": "ramp-j"
     },
     {
       "tailNumber": "N861PU",
       "type": "archer",
-      "spot": "planeBox"
+      "spot": "xc-1"
     },
     {
       "tailNumber": "N862PU",
@@ -432,7 +423,7 @@
     {
       "tailNumber": "N864PU",
       "type": "archer",
-      "spot": "planeBox"
+      "spot": "ramp-f"
     },
     {
       "tailNumber": "N865PU",

@@ -31,6 +31,10 @@ body {
     background-color: white;
 }
 
+#hangars {
+    border: none;
+}
+
 .table-list {
     width: 100%;
     text-align: left;
@@ -105,6 +109,14 @@ body {
     .table-list td {
         width: 50%;
         text-align: center;
+    }
+
+    .table-list tr {
+        height: 50px;
+    }
+
+    #planeBox {
+        display: none;
     }
 
 }
