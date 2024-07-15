@@ -2,84 +2,42 @@ body {
     background-color: gray;
 }
 
-#frame {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-    width: 1000px;
-    height: 850px;
-}
-
 .box {
-    position: absolute;
     text-align: center;
     border-radius: 10px;
     border: 1px solid black;
 }
 
 .title-box {
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
     background-color: black;
     color: white;
-    display: table;
-    overflow: hidden;
+    border: 1px solid black;
+    border-radius: 10px;
+    text-align: center;
 }
 
-#title {
-    height: 75px;
+.hangar-header {
+    background-color: black;
+    color: white;
+    text-align: center;
+    border: 1px solid black;
 }
 
-#title h1 {
-    margin: 0;
-    display: table-cell;
-    vertical-align: middle;
-}
-
-#ramp {
-    top: 75px;
-    height: 725px;
-    width: 150px;
+#ramp, #t-doors, #other {
     background-color: #cfb991;
 }
 
-.table-list {
-    position: absolute;
-    top: 30px;
-    width: 100%;
-    height: 695px;
-    text-align: left;
+#hangars, #direction {
+    background-color: white;
 }
 
-.table-list td {
-    padding-left: 10px;
+.table-list {
+    width: 100%;
+    text-align: left;
 }
 
 #last-ramp-spot {
     border-bottom: none;
-}
-
-#ramp-spots-container div {
-    height: 39px;
-    width: 100%;
-    border-bottom: 1px solid black;
-}
-
-#direction {
-    top: 75px;
-    left: 150px;
-    right: 150px;
-    height: 300px;
-    background-color: white;
-}
-
-.vert span {
-    display: block;
 }
 
 .center-table {
@@ -90,45 +48,9 @@ body {
     empty-cells: hide;
 }
 
-#hangars {
-    top: 375px;
-    left: 150px;
-    right: 150px;
-    height: 250px;
-    background-color: white;
-}
-
-.hangar-header {
-    background-color: black;
-    color: white;
-    border: 1px solid black;
-}
-
 .empty {
     border: 0px;
     background-color: gray;
-}
-
-
-#other {
-    top: 625px;
-    left: 150px;
-    right: 150px;
-    height: 175px;
-    background-color: #cfb991;
-}
-
-#other-table-list {
-    top: 0px;
-    height: 175px;
-}
-
-#t-doors {
-    top: 75px;
-    right: 0px;
-    height: 725px;
-    width: 150px;
-    background-color: #cfb991;
 }
 
 .plane {
@@ -168,8 +90,128 @@ body {
 }
 
 #note {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 1000px;
+    display: none;
+}
+
+@media (max-width: 1000px) {
+
+    .box {
+        margin-left: 5%;
+        margin-right: 5%;
+        margin-top: 2.5%;
+        margin-bottom: 2.5%;
+    }
+
+    .table-list td {
+        width: 50%;
+        text-align: center;
+    }
+
+}
+
+@media (min-width: 1001px) {
+
+    #frame {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: 1000px;
+        height: 850px;
+    }
+
+    .box {
+        position: absolute;
+    }
+
+    .title-box {
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        display: table;
+        overflow: hidden;
+    }
+
+    #title {
+        height: 75px;
+    }
+
+    #title h1 {
+        margin: 0;
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    #ramp {
+        top: 75px;
+        height: 725px;
+        width: 150px;
+    }
+
+    .table-list {
+        position: absolute;
+        top: 30px;
+        height: 695px;
+    }
+
+    .table-list td {
+        padding-left: 10px;
+    }
+
+    #direction {
+        top: 75px;
+        left: 150px;
+        right: 150px;
+        height: 300px;
+    }
+
+    .vert span {
+        display: block;
+    }
+
+    .center-table {
+        width: 100%;
+        height: 100%;
+        border-collapse: collapse;
+        tab-layout: fixed;
+        empty-cells: hide;
+    }
+
+    #hangars {
+        top: 375px;
+        left: 150px;
+        right: 150px;
+        height: 250px;
+    }
+
+    #other {
+        top: 625px;
+        left: 150px;
+        right: 150px;
+        height: 175px;
+    }
+
+    #other-table-list {
+        top: 0px;
+        height: 175px;
+    }
+
+    #t-doors {
+        top: 75px;
+        right: 0px;
+        height: 725px;
+        width: 150px;
+    }
+
+    #note {
+        display: block;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 1000px;
+    }
+
 }

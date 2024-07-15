@@ -26,7 +26,7 @@ const MovePlaneContext = createContext(() => {});
 function RampBox() {
     return (
         <div id="ramp" className="box">
-            <div className="box title-box" style={{"fontSize": 1.5+"em"}}>
+            <div className="title-box" style={{"fontSize": 1.5+"em"}}>
                 Ramp
             </div>
             <table className="table-list" border="1" frame="void" rules="rows">
@@ -201,7 +201,7 @@ function OtherBox() {
 function TDoorsBox() {
     return (
         <div id="t-doors" className="box">
-            <div className="box title-box" style={{"fontSize": 1.5+"em"}}>T Doors</div>
+            <div className="title-box" style={{"fontSize": 1.5+"em"}}>T Doors</div>
             <table className="table-list" border="1" frame="void" rules="rows">
                 <tbody>
                     <Spot name="t-1" box="tdoors" many={false} />
@@ -409,14 +409,14 @@ export default function App() {
             <RefreshTogglerContext.Provider value={{ refreshToggler, setRefreshToggler}}>
             <MovePlaneContext.Provider value={movePlane}>
                 <div id="frame">
-                    <div id="title" className="box title-box">
+                    <div id="title" className="title-box">
                         <h1>Aircraft Locations</h1>
                     </div>
                     <RampBox />
-                    <DirectionBox />
-                    <HangarsBox />
-                    <OtherBox />
                     <TDoorsBox />
+                    <HangarsBox />
+                    <DirectionBox />
+                    <OtherBox />
                 </div>
                 <div id="note">
                     Made with love by Johnny Burrer :)
