@@ -1,6 +1,9 @@
 import "./App.css";
 import { useState, useEffect, useContext, createContext } from "react";
 
+const DOMAIN = "https://dispatchdashboard.mooo.com";
+//const DOMAIN = "http://localhost:8080";
+
 // quick helper function to easily convert to title case
 function titleCase(str) {
     return str.toLowerCase().replace("-", " ").split(' ').map(w => w[0].toUpperCase() +
@@ -224,7 +227,7 @@ function Spot({ name, box, many }) {
     const [spotData, setSpotData] = useState(null);
     useEffect(() => {
         async function getSpotData() {
-            const response = await fetch("http://localhost:8080/getSpot?spot=" + name);
+            const response = await fetch(DOMAIN + "/getSpot?spot=" + name);
             return response.json();
         }
         getSpotData()
@@ -327,7 +330,7 @@ function PlaneBox() {
     const [planes, setPlanes] = useState(null);
     useEffect(() => {
         async function getPlanes() {
-            const response = await fetch("http://localhost:8080/getSpot?spot=planeBox");
+            const response = await fetch(DOMAIN + "/getSpot?spot=planeBox");
             return response.json();
         }
         getPlanes()
@@ -368,7 +371,7 @@ export default function App() {
     const [refreshToggler, setRefreshToggler] = useState(null);
     async function movePlane(spotName, plane) {
         if (planeToMove) {
-            fetch("http://localhost:8080/movePlane?plane=" + plane + "&spot=" + spotName)
+            fetch(DOMAIN + "/movePlane?plane=" + plane + "&spot=" + spotName)
                 .catch(e => console.log(e));
             setPlaneToMove(null);
         }
@@ -381,7 +384,7 @@ export default function App() {
             if(events){
                 events.close();
             }
-            events = new EventSource(`http://localhost:8080/events`);
+            events = new EventSource(DOMAIN + "/events");
             events.onmessage = (event) => {
                 if(mount){
                     setRefreshToggler(!refreshToggler);
