@@ -9,5 +9,6 @@ React. I used the nix package manager and direnv to create a development environ
 - https://react.dev/learn/passing-data-deeply-with-context
 - https://dev.to/andreyen/sending-messages-to-clients-in-realtime-using-server-sent-events-nodejs-and-react-2g90
 - https://hackernoon.com/a-tutorial-to-deploy-the-nodejs-app-to-nginx-server
+- https://superuser.com/questions/1343558/how-to-make-wsl-run-services-at-startup
 
 Written by Johnny Burrer.
