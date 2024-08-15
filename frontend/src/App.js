@@ -1,7 +1,7 @@
 import "./App.css";
 import { useState, useEffect, useContext, createContext } from "react";
 
-const DOMAIN = "https://hangar6parking.xyz";
+const DOMAIN = "https://hangar6parking.online";
 //const DOMAIN = "http://localhost:8080";
 
 // quick helper function to easily convert to title case
