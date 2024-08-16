@@ -88,7 +88,8 @@ body {
 }
 
 .glow {
-    -webkit-box-shadow: 0px 0px 5px 5px #0ff;
+    box-shadow: 0px 0px 5px 5px #0ff;
+    display: block;
     position: relative;
     z-index: 10;
 }
