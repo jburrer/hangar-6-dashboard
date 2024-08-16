@@ -275,6 +275,7 @@ function Spot({ name, box, many }) {
                     </tr>
                 );
             case "hangars":
+                let glowClassName = "innerGlowBox " + glow; 
                 let hangarsHeightVal = "68px";
                 if ([ "7", "8", "9", "10", "11", "12" ].includes(name.replace("h6w-",""))) {
                     hangarsHeightVal = "34px";
@@ -282,11 +283,11 @@ function Spot({ name, box, many }) {
                 return (
                     <td id={name} width="75px" height={hangarsHeightVal}
                             onClick={() => movePlane(name, planeToMove, glow)}>
-                        <div className={glow}>{plane}</div>
+                        <div className={glowClassName}>{plane}</div>
                     </td>
                 );
             case "direction":
-                let classNameVal = "many";
+                let classNameVal = "many innerGlowBox " + glow;
                 let colSpanVal = 1;
                 let displayName;
                 let widthVal;
@@ -308,11 +309,13 @@ function Spot({ name, box, many }) {
                     colSpanVal = 2;
                 }
                 return (
-                    <td id={name} className={glow}
-                            onClick={() => movePlane(name, planeToMove, glow)}
+                    <td id={name} onClick={() => movePlane(name, planeToMove, glow)}
                             width={widthVal} height={heightVal} colSpan={colSpanVal}>
-                        {displayName}
-                        <div className={classNameVal}>{planes}</div>
+                        <div className={classNameVal}>
+                            {displayName}
+                            <hr />
+                            {planes}
+                        </div>
                     </td>
                 );
             case "other":
