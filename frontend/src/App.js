@@ -1,8 +1,8 @@
 import "./App.css";
 import { useState, useEffect, useContext, createContext } from "react";
 
-const DOMAIN = "https://hangar6parking.online";
-//const DOMAIN = "http://localhost:8080";
+//const DOMAIN = "https://hangar6parking.online";
+const DOMAIN = "http://localhost:8080";
 
 // quick helper function to easily convert to title case
 function titleCase(str) {
@@ -257,7 +257,8 @@ function Spot({ name, box, many }) {
             case "ramp":
                 let upperChar = name.replace("ramp-", "").toUpperCase();
                 return (
-                    <tr id={name} className={glow} onClick={() => movePlane(name, planeToMove)}>
+                    <tr id={name} className={glow}
+                            onClick={() => movePlane(name, planeToMove, glow)}>
                         <td>{upperChar}</td>
                         <td>{plane}</td>
                     </tr>
@@ -265,7 +266,8 @@ function Spot({ name, box, many }) {
             case "tdoors":
                 let n = name.replace("t-", "");
                 return (
-                    <tr id={name} className={glow} onClick={() => movePlane(name, planeToMove)}>
+                    <tr id={name} className={glow}
+                            onClick={() => movePlane(name, planeToMove, glow)}>
                         <td>{n}</td>
                         <td>
                             {plane} 
@@ -279,7 +281,7 @@ function Spot({ name, box, many }) {
                 }
                 return (
                     <td id={name} className={glow} width="75px" height={hangarsHeightVal}
-                            onClick={() => movePlane(name, planeToMove)}>
+                            onClick={() => movePlane(name, planeToMove, glow)}>
                         <div>{plane}</div>
                     </td>
                 );
@@ -306,7 +308,8 @@ function Spot({ name, box, many }) {
                     colSpanVal = 2;
                 }
                 return (
-                    <td id={name} className={glow} onClick={() => movePlane(name, planeToMove)}
+                    <td id={name} className={glow}
+                            onClick={() => movePlane(name, planeToMove, glow)}
                             width={widthVal} height={heightVal} colSpan={colSpanVal}>
                         {displayName}
                         <div className={classNameVal}>{planes}</div>
@@ -315,7 +318,8 @@ function Spot({ name, box, many }) {
             case "other":
                 let otherDisplayName = titleCase(name);
                 return (
-                    <tr id={name} className={glow} onClick={() => movePlane(name, planeToMove)}>
+                    <tr id={name} className={glow}
+                            onClick={() => movePlane(name, planeToMove, glow)}>
                         <td>{otherDisplayName}</td>
                         <td>{planes}</td>
                     </tr>
@@ -369,8 +373,8 @@ function Plane({ plane }) {
 export default function App() {
     const [planeToMove, setPlaneToMove] = useState(null);
     const [refreshToggler, setRefreshToggler] = useState(null);
-    async function movePlane(spotName, plane) {
-        if (planeToMove) {
+    async function movePlane(spotName, plane, eligible) {
+        if (planeToMove && eligible) {
             fetch(DOMAIN + "/movePlane?plane=" + plane + "&spot=" + spotName)
                 .catch(e => console.log(e));
             setPlaneToMove(null);
