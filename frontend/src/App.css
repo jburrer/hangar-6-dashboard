@@ -93,14 +93,6 @@ body {
     z-index: 10;
 }
 
-td.glow:first-child {
-    box-shadow: 0px 0px 5px 5px #0ff;
-}
-td.glow:last-child {
-    box-shadow: 0px 0px 5px 5px #0ff;
-}
-
-
 #note {
     display: none;
 }

@@ -280,9 +280,9 @@ function Spot({ name, box, many }) {
                     hangarsHeightVal = "34px";
                 }
                 return (
-                    <td id={name} className={glow} width="75px" height={hangarsHeightVal}
+                    <td id={name} width="75px" height={hangarsHeightVal}
                             onClick={() => movePlane(name, planeToMove, glow)}>
-                        <div>{plane}</div>
+                        <div className={glow}>{plane}</div>
                     </td>
                 );
             case "direction":
