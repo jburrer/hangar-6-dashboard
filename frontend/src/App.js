@@ -1,8 +1,8 @@
 import "./App.css";
 import { useState, useEffect, useContext, createContext } from "react";
 
-const DOMAIN = "https://hangar6parking.online";
-//const DOMAIN = "http://localhost:8080";
+//const DOMAIN = "https://hangar6parking.online";
+const DOMAIN = "http://localhost:8080";
 
 // quick helper function to easily convert to title case
 function titleCase(str) {
@@ -268,7 +268,7 @@ function Spot({ name, box, many }) {
                 return (
                     <tr id={name} className={glow}
                             onClick={() => movePlane(name, planeToMove, glow)}>
-                        <td>{n}</td>
+                        <td className="id-col">{n}</td>
                         <td>
                             {plane} 
                         </td>
@@ -299,11 +299,10 @@ function Spot({ name, box, many }) {
                 }
                 if (name.includes("xc")) {
                     displayName = "XC";
-                    classNameVal += " vert";
                     widthVal = "75px";
-                    heightVal = "148px";
+                    heightVal = "74px";
                 } else {
-                    heightVal = "70px";
+                    heightVal = "35px";
                 }
                 if (name === "kmcx") {
                     colSpanVal = 2;

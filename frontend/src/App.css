@@ -56,7 +56,9 @@ body {
 
 .plane {
     color: white;
-    padding: 5px;
+    padding-top: 0px;
+    padding-left: 5px;
+    padding-right: 5px;
     border-radius: 10px;
 }
 
@@ -143,8 +145,8 @@ body {
         left: 0;
         right: 0;
         margin: auto;
-        width: 1000px;
-        height: 850px;
+        width: 900px;
+        height: 825px;
     }
 
     .box {
@@ -161,7 +163,7 @@ body {
     }
 
     #title {
-        height: 75px;
+        height: 50px;
     }
 
     #title h1 {
@@ -171,30 +173,26 @@ body {
     }
 
     #ramp {
-        top: 75px;
-        height: 725px;
-        width: 150px;
+        top: 50px;
+        height: 675px;
+        width: 100px;
     }
 
     .table-list {
         position: absolute;
         top: 30px;
-        height: 695px;
+        height: 645px;
     }
 
     .table-list td {
-        padding-left: 10px;
+        padding-left: 3px;
     }
 
     #direction {
-        top: 75px;
-        left: 150px;
-        right: 150px;
-        height: 300px;
-    }
-
-    .vert span {
-        display: block;
+        top: 50px;
+        left: 100px;
+        right: 100px;
+        height: 250px;
     }
 
     .center-table {
@@ -206,16 +204,16 @@ body {
     }
 
     #hangars {
-        top: 375px;
-        left: 150px;
-        right: 150px;
+        top: 300px;
+        left: 100px;
+        right: 100px;
         height: 250px;
     }
 
     #other {
-        top: 625px;
-        left: 150px;
-        right: 150px;
+        top: 550px;
+        left: 100px;
+        right: 100px;
         height: 175px;
     }
 
@@ -225,10 +223,10 @@ body {
     }
 
     #t-doors {
-        top: 75px;
+        top: 50px;
         right: 0px;
-        height: 725px;
-        width: 150px;
+        height: 675px;
+        width: 100px;
     }
 
     #note {
