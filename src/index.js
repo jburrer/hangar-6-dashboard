@@ -88,7 +88,8 @@ app.get("/events", (req, res) => {
         "Content-Type": "text/event-stream",
         "Access-Control-Allow-Origin": "*",
         "Connection": "keep-alive",
-        "Cache-Control": "no-cache"
+        "Cache-Control": "no-cache",
+        "X-Accel-Buffering": "no"
     });
  
     const clientId = genUniqId();
